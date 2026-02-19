@@ -2,6 +2,34 @@ from flask import Flask, render_template, request, jsonify
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
+import re  # Add this import at the top of app.py
+
+
+def sanitise_input(message):
+    """
+    Clean and validate user input.
+    Returns cleaned message or None if invalid.
+    """
+    if not message:
+        return None
+
+    # Remove leading/trailing whitespace
+    message = message.strip()
+
+    # Check if message is empty after stripping
+    if not message:
+        return None
+
+    # Remove HTML tags (prevents script injection)
+    message = re.sub(r"<[^>]+>", "", message)
+
+    # Check length after cleaning
+    if len(message) > 500:
+        return None
+
+    return message
+
+
 # Create the Flask application
 app = Flask(__name__)
 
@@ -76,3 +104,30 @@ def chat():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+import re  # Add this import at the top of app.py
+
+
+def sanitise_input(message):
+    """
+    Clean and validate user input.
+    Returns cleaned message or None if invalid.
+    """
+    if not message:
+        return None
+
+    # Remove leading/trailing whitespace
+    message = message.strip()
+
+    # Check if message is empty after stripping
+    if not message:
+        return None
+
+    # Remove HTML tags (prevents script injection)
+    message = re.sub(r"<[^>]+>", "", message)
+
+    # Check length after cleaning
+    if len(message) > 500:
+        return None
+
+    return message
